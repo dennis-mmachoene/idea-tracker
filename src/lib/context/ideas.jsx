@@ -2,8 +2,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { databases } from "../appwrite";
 import { ID, Query } from "appwrite";
 
-export const IDEAS_DATABASE_ID = "ideas-tracker>"; 
-export const IDEAS_COLLECTION_ID = "ideas-tracker>"; 
+export const IDEAS_DATABASE_ID = "ideas-tracker"; // Replace with your database ID
+export const IDEAS_COLLECTION_ID = "ideas-tracker"; // Replace with your collection ID
 
 const IdeasContext = createContext();
 
@@ -22,20 +22,23 @@ export function IdeasProvider(props) {
         ID.unique(),
         idea
       );
-      console.log(response)
       setIdeas((ideas) => [response, ...ideas].slice(0, 10));
     } catch (err) {
-      console.log(err) // handle error or show user a message
+      console.log(err); // handle error or show user a message
     }
   }
 
   async function remove(id) {
     try {
-      await databases.deleteDocument(IDEAS_DATABASE_ID, IDEAS_COLLECTION_ID, id);
+      await databases.deleteDocument(
+        IDEAS_DATABASE_ID,
+        IDEAS_COLLECTION_ID,
+        id
+      );
       setIdeas((ideas) => ideas.filter((idea) => idea.$id !== id));
       await init();
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
   }
 
@@ -46,9 +49,10 @@ export function IdeasProvider(props) {
         IDEAS_COLLECTION_ID,
         [Query.orderDesc("$createdAt"), Query.limit(10)]
       );
+
       setIdeas(response.documents);
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
   }
 

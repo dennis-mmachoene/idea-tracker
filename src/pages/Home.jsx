@@ -1,29 +1,40 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUser } from "../lib/context/user";
 import { useIdeas } from "../lib/context/ideas";
 
 export function Home() {
-    const user = useUser();
-    const ideas = useIdeas();
-  
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-  
-    const handleSubmit = async () => {
-      try {
-        await ideas?.add({ userId: user?.current?.$id, title, description });
-        setTitle("");
-        setDescription("");
-      } catch (err) {
-        console.error(err);
-      }
-    };
-  
-    return (
+  const user = useUser();
+  console.log(user);
+  const ideas = useIdeas();
+  console.log(ideas);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+   const [ideaList, setIdeaList] = useState([])
+
+   useEffect(() => {
+    if(ideas.current){
+        setIdeaList([...ideas.current])
+    }
+   }, [ideas?.current])
+
+   console.log(ideaList)
+  const handleSubmit = async () => {
+    try {
+      await ideas?.add({ userId: user?.current?.$id, title, description });
+      setTitle("");
+      setDescription("");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  return (
     <main className="p-6 bg-gray-100 min-h-screen">
       {user?.current ? (
         <section className="max-w-xl mx-auto bg-white p-6 rounded-xl shadow-md">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">Add Idea</h2>
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+            Add Idea
+          </h2>
           <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
             <input
               type="text"
@@ -49,12 +60,16 @@ export function Home() {
         </section>
       ) : (
         <section className="max-w-3xl mx-auto bg-white p-6 rounded-xl shadow-md">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">Latest Ideas</h2>
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+            Latest Ideas
+          </h2>
           <ul className="space-y-4">
-            {ideas?.current?.length ? (
-              ideas.current.map((idea) => (
+            {ideaList?.length ? (
+              ideaList.map((idea) => (
                 <li key={idea.$id} className="p-4 bg-gray-50 rounded-lg border">
-                  <strong className="block text-lg text-gray-900">{idea.title}</strong>
+                  <strong className="block text-lg text-gray-900">
+                    {idea.title}
+                  </strong>
                   <p className="text-gray-700 mt-2">{idea.description}</p>
                   <button
                     onClick={() => ideas?.remove(idea.$id)}
@@ -73,6 +88,6 @@ export function Home() {
       )}
     </main>
   );
-};
+}
 
 export default Home;

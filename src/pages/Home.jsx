@@ -59,6 +59,12 @@ export function Home() {
           </form>
         </section>
       ) : (
+        <section>
+            <p>
+                Please login to submit an idea.
+            </p>
+        </section>
+      )}
         <section className="max-w-3xl mx-auto bg-white p-6 rounded-xl shadow-md">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">
             Latest Ideas
@@ -85,7 +91,6 @@ export function Home() {
             )}
           </ul>
         </section>
-      )}
     </main>
   );
 }

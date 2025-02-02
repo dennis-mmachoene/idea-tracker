@@ -77,13 +77,16 @@ export function Home() {
                     {idea.title}
                   </strong>
                   <p className="text-gray-700 mt-2">{idea.description}</p>
-                  <button
+                  {user.current && user.current.$id === idea.userId && (
+                    <button
                     onClick={() => ideas?.remove(idea.$id)}
                     type="button"
                     className="mt-3 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
                   >
                     Delete
                   </button>
+                  )}
+                  
                 </li>
               ))
             ) : (
